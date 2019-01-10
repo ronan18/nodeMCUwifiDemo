@@ -5,26 +5,35 @@
 </head>
 <body>
 <main id="app">
+  <p>Server ip: {{ip}}</p>
   <button @click="toggle">Toggle Light</button>
-  <p>{{state}}</p>
+  <p>Light on: {{state}}</p>
 </main>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/vue.min.js"></script>
 <script>
-  let socket = io();
-  socket.on('state', data => {
-    app.state = data;
-  })
+  let socket
   let app = new Vue({
     el: '#app',
     data: {
+      ip: null,
       state: false
     },
     methods: {
       toggle() {
         socket.emit('stateUpdate', !this.state)
+
       }
+    },
+    mounted() {
+      socket = io();
+      socket.on('state', data => {
+        this.state = data;
+      })
+      socket.on('ip', data => {
+        this.ip = data;
+      })
     }
   })
 </script>

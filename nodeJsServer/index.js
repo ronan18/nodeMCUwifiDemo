@@ -27,9 +27,10 @@ let server = http.listen(3000, () => {
 io.on('connection', (socket) => {
   console.log('a user connected');
   socket.emit('state', message);
+  socket.emit('ip', ip);
   socket.on('stateUpdate', newState => {
     console.log('newState', newState)
     message = newState
-    socket.emit('state', message);
+    io.emit('state', message);
   })
 });
