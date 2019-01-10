@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node MCU Light Demo</title>
+</head>
+<body>
+<main id="app">
+  <button @click="toggle">Toggle Light</button>
+  <p>{{state}}</p>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/vue.min.js"></script>
+<script>
+  let socket = io();
+  socket.on('state', data => {
+    app.state = data;
+  })
+  let app = new Vue({
+    el: '#app',
+    data: {
+      state: false
+    },
+    methods: {
+      toggle() {
+        socket.emit('stateUpdate', !this.state)
+      }
+    }
+  })
+</script>
+</body>
+</html>
